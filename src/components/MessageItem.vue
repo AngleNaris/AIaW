@@ -29,9 +29,7 @@
         </div>
       </div>
     </div>
-    <div
-      min-w-0
-    >
+    <div min-w-0>
       <div
         position-relative
         :class="message.type === 'user' ? 'min-h-48px' : 'min-h-24px min-w-100px'"
@@ -104,7 +102,7 @@
                   <q-separator vertical />
                   <q-btn
                     icon="sym_o_content_copy"
-                    :label="$t('messageItem.copyMarkdown')"
+                    :label="$t('messageItem.markdown')"
                     @click="copyToClipboard(selected.text)"
                     :title="$t('messageItem.copyMarkdown')"
                     no-caps

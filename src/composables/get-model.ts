@@ -23,7 +23,10 @@ export function useGetModel() {
   const user = DexieDBURL ? useObservable(db.cloud.currentUser) : null
   const defaultProvider = computed(() => user?.value.isLoggedIn ? {
     type: 'openai-compatible',
-    settings: { apiKey: user.value.data.apiKey, baseURL: LitellmBaseURL }
+    settings: {
+      apiKey: user.value.data.apiKey,
+      baseURL: new URL(LitellmBaseURL, location.origin).toString()
+    }
   } : null)
   const { perfs } = useUserPerfsStore()
   const providersStore = useProvidersStore()
@@ -41,12 +44,12 @@ export function useGetModel() {
       fetch
     })
   }
-  function getSdkModel(provider?: Provider, model?: Model, options?: Record<string, any>) {
+  function getSdkModel(provider?: Provider, model?: Model) {
     const sdkProvider = getSdkProvider(provider)
     if (!sdkProvider) return null
     model = getModel(model)
     if (!model) return null
-    const m = sdkProvider(model.name, options) || getSdkProvider(defaultProvider.value)(model.name, options)
+    const m = sdkProvider(model.name) || getSdkProvider(defaultProvider.value)(model.name)
     return m && wrapMiddlewares(m)
   }
   return { getProvider, getModel, getSdkProvider, getSdkModel }
